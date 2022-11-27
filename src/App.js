@@ -31,8 +31,8 @@ function App() {
     let email
     let senha
     let cpf
-    let faixaEtaria
-    let sexo
+    let faixaEtaria = 0
+    let sexo = 0
 
     if (filtro(values, 'Indentificacao') === 1) {
       if (filtro(values, 'MetodoIndentificacao') === 1) {
@@ -52,18 +52,25 @@ function App() {
       sexo = filtro(values, 'sexo')
     }
 
+    const sintomasLista = sintomas.map(valor => ({ tipo: valor, descricao: null }))
+
+    console.log(cpf, senha, email)
+
     const dados = {
+      user_id: null,
       sexo,
       faixa_etaria: faixaEtaria,
       lat: usuarioLocalizacao.latitude,
       lng: usuarioLocalizacao.longitude,
-      sintomas,
-      email,
-      senha,
-      cpf
+      sintomas: sintomasLista
     }
 
     setDadosColetados(dados)
+
+    axios({ method: 'get', url: 'https://vitakod-api.herokuapp.com/save_data', data: dados })
+      .then(function (response) {
+        console.log(response.data)
+      })
 
     // console.log('dados coletados', {
     //   sexo,
@@ -77,7 +84,7 @@ function App() {
     // })
 
     // alert(`Valores: ${valuesString}`);
-    handleSave();
+    // handleSave();
   };
 
   const {
@@ -115,27 +122,27 @@ function App() {
     setSintomas(sintomasValue);
   };
 
-  const handleSave = async () => {
-    console.log("responsee");
+  // const handleSave = async () => {
+  //   console.log("responsee");
 
-    // const BASE_URL = "https://veiculos.fipe.org.br/api/veiculos";
+  //   // const BASE_URL = "https://veiculos.fipe.org.br/api/veiculos";
 
-    const BASE_URL =
-      "https://id3ns36xmi.execute-api.us-east-2.amazonaws.com/api";
+  //   const BASE_URL =
+  //     "https://id3ns36xmi.execute-api.us-east-2.amazonaws.com/api";
 
-    const api = axios.create({
-      baseURL: BASE_URL,
-    });
+  //   const api = axios.create({
+  //     baseURL: BASE_URL,
+  //   });
 
-    api.get("/geo", { lat: "-20.4764898", lng: "-54.61846" }).then((r) => {
-      console.log("lat lng");
-      console.log(r);
-    });
+  //   api.get("/geo", { lat: "-20.4764898", lng: "-54.61846" }).then((r) => {
+  //     console.log("lat lng");
+  //     console.log(r);
+  //   });
 
-    // api.post("/ConsultarTabelaDeReferencia").then((r) => {
-    //   console.log(r);
-    // });
-  };
+  //   // api.post("/ConsultarTabelaDeReferencia").then((r) => {
+  //   //   console.log(r);
+  //   // });
+  // };
 
   return (
     <div className="App">
