@@ -1,4 +1,5 @@
 import "./App.css";
+import VitaClub from "./vitaClub";
 import ChatBot from "react-simple-chatbot";
 import { useGeolocated } from "react-geolocated";
 import { useState } from "react";
@@ -15,6 +16,8 @@ function App() {
 
   const [localizacaoAtiva, setLocalizacaoAtiva] = useState(false)
   const [usuarioLocalizacao, setUsuarioLocalizacao] = useState()
+
+  const [tela, setTela] = useState('chat')
 
   const verificarLocalizacao = () => {
     if (coords) {
@@ -52,8 +55,13 @@ function App() {
           ]}
         />
 
+        <button className="Mais"
+          style={{ display: !localizacaoAtiva || tela != 'chat' ? 'none' : '' }}
+          onClick={() => setTela('VitaClub')}
+        >...</button>
+
         <ChatBot
-          style={{ display: !localizacaoAtiva ? 'none' : '' }}
+          style={{ display: !localizacaoAtiva || tela != 'chat' ? 'none' : '' }}
           headerTitle="Vitabot"
           steps={[
             {
@@ -96,6 +104,16 @@ function App() {
             },
           ]}
         />
+        {
+          tela != 'chat' ?
+            <div>
+              <VitaClub />
+              <button className="Voltar" onClick={() => setTela('chat')}>⏪</button>
+            </div>
+            :
+            <div></div>
+        }
+
         <div className="Versao-div">v 0.1</div>
       </header>
     </div>
