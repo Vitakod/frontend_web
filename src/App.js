@@ -4,94 +4,85 @@ import ChatBot from "react-simple-chatbot";
 import AnimatedMulti from "./components/AnimateMult";
 import { useGeolocated } from "react-geolocated";
 import { useState } from "react";
-import axios from "axios";
 
 function App() {
-  const [dadosColetados, setDadosColetados] = useState({})
   const [localizacaoAtiva, setLocalizacaoAtiva] = useState(false);
   const [usuarioLocalizacao, setUsuarioLocalizacao] = useState();
-  const [sintomas, setSintomas] = useState([])
+  const [sintomas, setSintomas] = useState([]);
 
   const handleEnd = ({ steps, values }) => {
-    // console.log(steps);
-    console.log(dadosColetados)
-    // console.log(values)
-
-    // const valuesString = values.map((v) => {
-    //   return v;
-    // });
-    // console.log(usuarioLocalizacao);
-
     const filtro = (valores, palavraChave) => {
-      if (valores.find(valor => typeof valor == 'string' && valor.includes(palavraChave)))
-        return parseInt(valores.find(valor => typeof valor == 'string' && valor.includes(palavraChave)).split('=')[1])
-      else return null
-    }
+      if (
+        valores.find(
+          (valor) => typeof valor == "string" && valor.includes(palavraChave)
+        )
+      )
+        return parseInt(
+          valores
+            .find(
+              (valor) =>
+                typeof valor == "string" && valor.includes(palavraChave)
+            )
+            .split("=")[1]
+        );
+      else return null;
+    };
 
-    let email
-    let senha
-    let cpf
-    let faixaEtaria = 0
-    let sexo = 0
+    let email;
+    let senha;
+    let cpf;
+    let faixaEtaria = 0;
+    let sexo = 0;
 
-    if (filtro(values, 'Indentificacao') === 1) {
-      if (filtro(values, 'MetodoIndentificacao') === 1) {
-        email = values[2]
-        senha = values[3]
-        cpf = values[4]
-        faixaEtaria = filtro(values, 'faixaEtaria')
-        sexo = filtro(values, 'sexo')
+    if (filtro(values, "Indentificacao") === 1) {
+      if (filtro(values, "MetodoIndentificacao") === 1) {
+        email = values[2];
+        senha = values[3];
+        cpf = values[4];
+        faixaEtaria = filtro(values, "faixaEtaria");
+        sexo = filtro(values, "sexo");
+      } else {
+        email = values[2];
+        senha = values[3];
       }
-      else {
-        email = values[2]
-        senha = values[3]
-      }
-    }
-    else {
-      faixaEtaria = filtro(values, 'faixaEtaria')
-      sexo = filtro(values, 'sexo')
+    } else {
+      faixaEtaria = filtro(values, "faixaEtaria");
+      sexo = filtro(values, "sexo");
     }
 
-    const sintomasLista = sintomas.map(valor => ({ tipo: valor, descricao: null }))
+    const sintomasLista = sintomas.map((valor) => ({
+      tipo: valor,
+      descricao: "descricao",
+    }));
 
-    console.log(cpf, senha, email)
+    console.log(cpf, senha, email);
 
-    const dados = {
+    let headersList = {
+      Accept: "/",
+      "User-Agent": "Thunder Client (https://www.thunderclient.com/)",
+      "Content-Type": "application/json",
+    };
+
+    const dadosJson = JSON.stringify({
       user_id: null,
       sexo,
       faixa_etaria: faixaEtaria,
       lat: usuarioLocalizacao.latitude,
       lng: usuarioLocalizacao.longitude,
-      sintomas: sintomasLista
-    }
+      sintomas: sintomasLista,
+    });
 
-    setDadosColetados(dados)
-
-    axios({ method: 'get', url: 'https://vitakod-api.herokuapp.com/save_data', data: dados })
-      .then(function (response) {
-        console.log(response.data)
-      })
-
-    // console.log('dados coletados', {
-    //   sexo,
-    //   faixa_etaria: faixaEtaria,
-    //   lat: usuarioLocalizacao.latitude,
-    //   lng: usuarioLocalizacao.longitude,
-    //   sintomas,
-    //   email,
-    //   senha,
-    //   cpf
-    // })
-
-    // alert(`Valores: ${valuesString}`);
-    // handleSave();
+    fetch("https://vitakod-api.herokuapp.com/save_data", {
+      method: "POST",
+      body: dadosJson,
+      headers: headersList,
+    }).then((response) => {
+      console.log("deu certo");
+      console.log(response);
+    });
   };
 
-  const {
-    coords,
-    // isGeolocationAvailable,
-    // isGeolocationEnabled,
-  } = useGeolocated({
+  const { coords } = useGeolocated({
     positionOptions: {
       enableHighAccuracy: true,
     },
@@ -122,32 +113,9 @@ function App() {
     setSintomas(sintomasValue);
   };
 
-  // const handleSave = async () => {
-  //   console.log("responsee");
-
-  //   // const BASE_URL = "https://veiculos.fipe.org.br/api/veiculos";
-
-  //   const BASE_URL =
-  //     "https://id3ns36xmi.execute-api.us-east-2.amazonaws.com/api";
-
-  //   const api = axios.create({
-  //     baseURL: BASE_URL,
-  //   });
-
-  //   api.get("/geo", { lat: "-20.4764898", lng: "-54.61846" }).then((r) => {
-  //     console.log("lat lng");
-  //     console.log(r);
-  //   });
-
-  //   // api.post("/ConsultarTabelaDeReferencia").then((r) => {
-  //   //   console.log(r);
-  //   // });
-  // };
-
   return (
     <div className="App">
       <header className="App-header">
-        {/* <button onClick={handleSave}>teste</button> */}
         <ChatBot
           style={{ display: localizacaoAtiva ? "none" : "" }}
           headerTitle="Verificando Localização"
@@ -201,8 +169,8 @@ function App() {
             {
               id: "2",
               options: [
-                { value: 'Indentificacao=0', label: "Não!", trigger: "6" },
-                { value: 'Indentificacao=1', label: "Sim...", trigger: "3" },
+                { value: "Indentificacao=0", label: "Não!", trigger: "6" },
+                { value: "Indentificacao=1", label: "Sim...", trigger: "3" },
               ],
               placeholder: "Escolha uma opção",
             },
@@ -214,8 +182,16 @@ function App() {
             {
               id: "4",
               options: [
-                { value: 'MetodoIndetificacao=0', label: "Login", trigger: "30" },
-                { value: 'MetodoIndentificacao=1', label: "Novo cadastro", trigger: "7" },
+                {
+                  value: "MetodoIndetificacao=0",
+                  label: "Login",
+                  trigger: "30",
+                },
+                {
+                  value: "MetodoIndentificacao=1",
+                  label: "Novo cadastro",
+                  trigger: "7",
+                },
               ],
               placeholder: "Escolha uma opção",
             },
@@ -264,9 +240,17 @@ function App() {
             {
               id: "14",
               options: [
-                { value: 'faixaEtaria=1', label: "Até 17 anos", trigger: "15" },
-                { value: 'faixaEtaria=2', label: "18 - 60 anos", trigger: "15" },
-                { value: 'faixaEtaria=3', label: "Mais de 60 anos", trigger: "15" },
+                { value: "faixaEtaria=1", label: "Até 17 anos", trigger: "15" },
+                {
+                  value: "faixaEtaria=2",
+                  label: "18 - 60 anos",
+                  trigger: "15",
+                },
+                {
+                  value: "faixaEtaria=3",
+                  label: "Mais de 60 anos",
+                  trigger: "15",
+                },
               ],
               placeholder: "Escolha uma opção",
             },
@@ -278,8 +262,8 @@ function App() {
             {
               id: "16",
               options: [
-                { value: 'sexo=0', label: "Feminino", trigger: "49" },
-                { value: 'sexo=1', label: "Masculino", trigger: "49" },
+                { value: "sexo=0", label: "Feminino", trigger: "49" },
+                { value: "sexo=1", label: "Masculino", trigger: "49" },
               ],
               placeholder: "Escolha uma opção",
             },
@@ -361,7 +345,7 @@ function App() {
           </div>
         ) : null}
 
-        <div className="Versao-div">v 1.0.0</div>
+        <div className="Versao-div">v 2.1.2</div>
       </header>
     </div>
   );
