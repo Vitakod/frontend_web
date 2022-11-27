@@ -59,29 +59,29 @@ function App() {
   const handleSave = async () => {
     console.log("responsee");
 
-    const BASE_URL = "https://veiculos.fipe.org.br/api/veiculos";
+    // const BASE_URL = "https://veiculos.fipe.org.br/api/veiculos";
 
-    // const BASE_URL =
-    //   "https://id3ns36xmi.execute-api.us-east-2.amazonaws.com/api";
+    const BASE_URL =
+      "https://id3ns36xmi.execute-api.us-east-2.amazonaws.com/api";
 
     const api = axios.create({
       baseURL: BASE_URL,
     });
 
-    // api.get("/geo", { lat: "-20.4764898", lng: "-54.61846" }).then((r) => {
-    //   console.log("lat lng");
-    //   console.log(r);
-    // });
-
-    api.post("/ConsultarTabelaDeReferencia").then((r) => {
+    api.get("/geo", { lat: "-20.4764898", lng: "-54.61846" }).then((r) => {
+      console.log("lat lng");
       console.log(r);
     });
+
+    // api.post("/ConsultarTabelaDeReferencia").then((r) => {
+    //   console.log(r);
+    // });
   };
 
   return (
     <div className="App">
       <header className="App-header">
-        {/* <button onClick={handleSave}>teste</button> */}
+        <button onClick={handleSave}>teste</button>
         <ChatBot
           style={{ display: localizacaoAtiva ? "none" : "" }}
           headerTitle="Verificando Localização"

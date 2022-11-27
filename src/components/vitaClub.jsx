@@ -8,11 +8,11 @@ export default function VitaClub() {
 
     const handleObterPontos=()=>{
         setPontos(0);
-    }
+    };
 
     useEffect(()=>{
-
-    },[handleObterPontos]);
+        handleObterPontos();
+    },[]);
     
     return <div className="VitaClub">
         <div className="Pontos">
