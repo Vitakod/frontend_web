@@ -105,7 +105,9 @@ function App() {
 
         <button
           className="Mais"
-          style={{ display: !localizacaoAtiva || tela != "chat" ? "none" : "" }}
+          style={{
+            display: !localizacaoAtiva || tela !== "chat" ? "none" : "",
+          }}
           onClick={() => setTela("VitaClub")}
         >
           ...
@@ -113,7 +115,9 @@ function App() {
 
         <ChatBot
           handleEnd={handleEnd}
-          style={{ display: !localizacaoAtiva || tela != "chat" ? "none" : "" }}
+          style={{
+            display: !localizacaoAtiva || tela !== "chat" ? "none" : "",
+          }}
           headerTitle="Vitabot"
           // speechSynthesis={{ enable: true, lang: "pt-BR" }}
           bubbleStyle={{ backgroundColor: "white", color: "#444" }}
@@ -282,7 +286,7 @@ function App() {
             },
           ]}
         />
-        {tela != "chat" ? (
+        {tela !== "chat" ? (
           <div>
             <VitaClub />
             <button className="Voltar" onClick={() => setTela("chat")}>
