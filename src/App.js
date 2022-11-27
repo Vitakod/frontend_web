@@ -1,6 +1,6 @@
 import "./App.css";
 import ChatBot from "react-simple-chatbot";
-
+import AnimatedMulti from "./components/AnimateMult";
 import { useGeolocated } from "react-geolocated";
 import { useState } from "react";
 
@@ -27,6 +27,7 @@ function App() {
 
   const [localizacaoAtiva, setLocalizacaoAtiva] = useState(false);
   const [usuarioLocalizacao, setUsuarioLocalizacao] = useState();
+  const [sintomas, setSintomas] = useState([]);
 
   const verificarLocalizacao = () => {
     if (coords) {
@@ -35,11 +36,19 @@ function App() {
         longitude: coords.longitude,
         latitude: coords.latitude,
       });
+      console.log(coords);
     } else {
       alert(
         "Por favor click no canto superior esquerdo para conceder acesso a localização"
       );
     }
+  };
+
+  const handleSintomas = (sintomas) => {
+    const sintomasValue = sintomas.map((v) => {
+      return v.value;
+    });
+    console.log(sintomasValue);
   };
 
   return (
@@ -69,17 +78,18 @@ function App() {
           handleEnd={handleEnd}
           style={{ display: !localizacaoAtiva ? "none" : "" }}
           headerTitle="Vitabot"
-          speechSynthesis={{ enable: true, lang: "pt-BR" }}
+          // speechSynthesis={{ enable: true, lang: "pt-BR" }}
           bubbleStyle={{ backgroundColor: "white", color: "#444" }}
           bubbleOptionStyle={{ backgroundColor: "#3e3" }}
           contentStyle={{ backgroundColor: "#eee" }}
-          placeholder={"Escolha a opção..."}
+          placeholder={"Escreva sua resposta..."}
           steps={[
             //#region IDENTIFICAÇÃO
             {
               id: "4",
               message: "Deseja se identificar?",
               trigger: "5",
+              placeholder: "Escolha uma opção",
             },
             {
               id: "5",
@@ -127,6 +137,7 @@ function App() {
               id: "13",
               message: "Selecione sua faixa etária:",
               trigger: "14",
+              placeholder: "Escolha uma opção",
             },
             {
               id: "14",
@@ -145,30 +156,37 @@ function App() {
             },
             {
               id: "16",
-              options: [
-                { value: 1, label: "Tosse", trigger: "17" },
-                { value: 2, label: "Febre", trigger: "17" },
-                { value: 3, label: "Cansaço", trigger: "17" },
-                { value: 4, label: "Perda de paladar/olfato", trigger: "17" },
-                { value: 5, label: "Falta de ar", trigger: "17" },
-                { value: 6, label: "Diarréia", trigger: "17" },
-                { value: 7, label: "Dor de cabeça", trigger: "17" },
-              ],
+              component: (
+                <AnimatedMulti
+                  onChange={(valores) => handleSintomas(valores)}
+                />
+              ),
               placeholder: "Marque as opções",
+              trigger: "17",
             },
             {
               id: "17",
-              message: "Obrigado por reportar!",
+              message: "Finalizou?",
               trigger: "18",
+              delay: 5000,
             },
             {
               id: "18",
+              options: [{ value: 1, label: "Sim!", trigger: "19" }],
+            },
+            {
+              id: "19",
+              message: "Obrigado por reportar!",
+              trigger: "20",
+            },
+            {
+              id: "20",
               message: "Fim",
               end: true,
             },
           ]}
         />
-        <div className="Versao-div">v 0.1</div>
+        <div className="Versao-div">v 1.0.0</div>
       </header>
     </div>
   );
