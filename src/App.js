@@ -16,6 +16,7 @@ function App() {
     console.log(usuarioLocalizacao);
 
     alert(`Valores: ${valuesString}`);
+    handleSave();
   };
 
   const {
@@ -32,7 +33,7 @@ function App() {
   const [localizacaoAtiva, setLocalizacaoAtiva] = useState(false);
   const [usuarioLocalizacao, setUsuarioLocalizacao] = useState();
 
-  const [tela, setTela] = useState('chat')
+  const [tela, setTela] = useState("chat");
 
   const verificarLocalizacao = () => {
     if (coords) {
@@ -80,7 +81,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <button onClick={handleSave}>teste</button>
+        {/* <button onClick={handleSave}>teste</button> */}
         <ChatBot
           style={{ display: localizacaoAtiva ? "none" : "" }}
           headerTitle="Verificando Localização"
@@ -102,14 +103,17 @@ function App() {
           ]}
         />
 
-        <button className="Mais"
-          style={{ display: !localizacaoAtiva || tela != 'chat' ? 'none' : '' }}
-          onClick={() => setTela('VitaClub')}
-        >...</button>
+        <button
+          className="Mais"
+          style={{ display: !localizacaoAtiva || tela != "chat" ? "none" : "" }}
+          onClick={() => setTela("VitaClub")}
+        >
+          ...
+        </button>
 
         <ChatBot
           handleEnd={handleEnd}
-          style={{ display: !localizacaoAtiva || tela != 'chat' ? 'none' : '' }}
+          style={{ display: !localizacaoAtiva || tela != "chat" ? "none" : "" }}
           headerTitle="Vitabot"
           // speechSynthesis={{ enable: true, lang: "pt-BR" }}
           bubbleStyle={{ backgroundColor: "white", color: "#444" }}
@@ -278,15 +282,14 @@ function App() {
             },
           ]}
         />
-        {
-          tela != 'chat' ?
-            <div>
-              <VitaClub />
-              <button className="Voltar" onClick={() => setTela('chat')}>⏪</button>
-            </div>
-            :
-            null
-        }
+        {tela != "chat" ? (
+          <div>
+            <VitaClub />
+            <button className="Voltar" onClick={() => setTela("chat")}>
+              ⏪
+            </button>
+          </div>
+        ) : null}
 
         <div className="Versao-div">v 1.0.0</div>
       </header>
