@@ -4,7 +4,7 @@ import makeAnimated from 'react-select/animated';
 
 const animatedComponents = makeAnimated();
 
- const sintomas = [
+const sintomas = [
   { value: 1, label: "Tosse" },
   { value: 2, label: "Febre" },
   { value: 3, label: "Cansaço" },
@@ -14,7 +14,7 @@ const animatedComponents = makeAnimated();
   { value: 7, label: "Dor de cabeça" },
 ];
 
-const  AnimatedMulti = ({onChange}) => {
+const AnimatedMulti = ({ onChange }) => {
   return (
     <Select
       onChange={(choice) => onChange(choice)}
@@ -22,12 +22,12 @@ const  AnimatedMulti = ({onChange}) => {
         control: (baseStyles, state) => ({
           ...baseStyles,
           borderColor: state.isFocused ? 'grey' : 'green',
-          fontSize:'1rem'
+          fontSize: '1rem'
         }),
-        option:(baseStyles, state) => ({
+        option: (baseStyles, state) => ({
           ...baseStyles,
-          color:'black',
-          fontSize:'1rem'
+          color: 'black',
+          fontSize: '1rem'
         }),
       }}
       closeMenuOnSelect={false}
