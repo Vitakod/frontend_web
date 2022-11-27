@@ -110,3 +110,24 @@
   font-size: 10px;
   margin: 10px -15px;
 }
+
+.Pontos_Mais {
+  font-size: 30px;
+  padding: 0px 0px 4px 2px;
+  border: none;
+  color: #0d99ff;
+  ;
+  background: none;
+  position: absolute;
+  margin-top: -17px;
+  cursor: pointer;
+}
+
+.Pontos_Beneficios {
+  width: 250px;
+  height: 250px;
+  border-radius: 15px;
+  margin-left: -130px;
+  position: absolute;
+  border: black 5px solid;
+}

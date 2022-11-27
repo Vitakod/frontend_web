@@ -1,5 +1,5 @@
 import "./App.css";
-import VitaClub from "./vitaClub";
+import VitaClub from "./components/vitaClub";
 import ChatBot from "react-simple-chatbot";
 import AnimatedMulti from "./components/AnimateMult";
 import { useGeolocated } from "react-geolocated";
@@ -85,7 +85,7 @@ function App() {
 
         <ChatBot
           handleEnd={handleEnd}
-          style={{ display: !localizacaoAtiva ? "none" : "" }}
+          style={{ display: !localizacaoAtiva || tela != 'chat' ? 'none' : '' }}
           headerTitle="Vitabot"
           // speechSynthesis={{ enable: true, lang: "pt-BR" }}
           bubbleStyle={{ backgroundColor: "white", color: "#444" }}
@@ -202,7 +202,7 @@ function App() {
               <button className="Voltar" onClick={() => setTela('chat')}>⏪</button>
             </div>
             :
-            <div></div>
+            null
         }
 
         <div className="Versao-div">v 1.0.0</div>
