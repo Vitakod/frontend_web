@@ -3,6 +3,7 @@ import ChatBot from "react-simple-chatbot";
 import AnimatedMulti from "./components/AnimateMult";
 import { useGeolocated } from "react-geolocated";
 import { useState } from "react";
+import axios from "axios";
 
 function App() {
   const handleEnd = ({ steps, values }) => {
@@ -11,7 +12,9 @@ function App() {
     const valuesString = values.map((v) => {
       return v;
     });
-    alert(`Chat handleEnd callback! Number: ${valuesString}`);
+    console.log(usuarioLocalizacao);
+
+    alert(`Valores: ${valuesString}`);
   };
 
   const {
@@ -27,7 +30,6 @@ function App() {
 
   const [localizacaoAtiva, setLocalizacaoAtiva] = useState(false);
   const [usuarioLocalizacao, setUsuarioLocalizacao] = useState();
-  // const [sintomas, setSintomas] = useState([]);
 
   const verificarLocalizacao = () => {
     if (coords) {
@@ -36,7 +38,6 @@ function App() {
         longitude: coords.longitude,
         latitude: coords.latitude,
       });
-      console.log(coords);
     } else {
       alert(
         "Por favor click no canto superior esquerdo para conceder acesso a localização"
@@ -49,16 +50,39 @@ function App() {
       return v.value;
     });
     console.log(sintomasValue);
-    console.log(usuarioLocalizacao);
+  };
+
+  const handleSave = async () => {
+    console.log("responsee");
+
+    const BASE_URL = "https://veiculos.fipe.org.br/api/veiculos";
+
+    // const BASE_URL =
+    //   "https://id3ns36xmi.execute-api.us-east-2.amazonaws.com/api";
+
+    const api = axios.create({
+      baseURL: BASE_URL,
+    });
+
+    // api.get("/geo", { lat: "-20.4764898", lng: "-54.61846" }).then((r) => {
+    //   console.log("lat lng");
+    //   console.log(r);
+    // });
+
+    api.post("/ConsultarTabelaDeReferencia").then((r) => {
+      console.log(r);
+    });
   };
 
   return (
     <div className="App">
       <header className="App-header">
+        <button onClick={handleSave}>teste</button>
         <ChatBot
           style={{ display: localizacaoAtiva ? "none" : "" }}
           headerTitle="Verificando Localização"
           handleEnd={verificarLocalizacao}
+          placeholder={"Aceite a localização."}
           botDelay={2000}
           steps={[
             {
@@ -81,32 +105,47 @@ function App() {
           headerTitle="Vitabot"
           // speechSynthesis={{ enable: true, lang: "pt-BR" }}
           bubbleStyle={{ backgroundColor: "white", color: "#444" }}
-          bubbleOptionStyle={{ backgroundColor: "#3e3" }}
+          bubbleOptionStyle={{ backgroundColor: "#38f" }}
           contentStyle={{ backgroundColor: "#eee" }}
           placeholder={"Escreva sua resposta..."}
           steps={[
             //#region IDENTIFICAÇÃO
             {
-              id: "4",
+              id: "1",
               message: "Deseja se identificar?",
-              trigger: "5",
+              placeholder: "Escolha uma opção",
+              trigger: "2",
+            },
+            {
+              id: "2",
+              options: [
+                { value: 1, label: "Não!", trigger: "6" },
+                { value: 2, label: "Sim...", trigger: "3" },
+              ],
               placeholder: "Escolha uma opção",
             },
             {
-              id: "5",
+              id: "3",
+              message: "Fazer login ou novo cadastro?",
+              trigger: "4",
+            },
+            {
+              id: "4",
               options: [
-                { value: 1, label: "Não!", trigger: "6" },
-                { value: 2, label: "Sim...", trigger: "7" },
+                { value: 1, label: "Login", trigger: "30" },
+                { value: 2, label: "Novo cadastro", trigger: "7" },
               ],
+              placeholder: "Escolha uma opção",
             },
             {
               id: "6",
-              message: "Ok, Vamos lá!",
-              trigger: "15",
+              message:
+                "Se você não se identificar, não poderá participar do nosso clube de benefícios...",
+              trigger: "13",
             },
             {
               id: "7",
-              message: "Digite seu nome:",
+              message: "Digite seu email:",
               trigger: "8",
             },
             {
@@ -116,7 +155,7 @@ function App() {
             },
             {
               id: "9",
-              message: "Digite seu email:",
+              message: "Digite sua senha:",
               trigger: "10",
             },
             {
@@ -143,45 +182,89 @@ function App() {
             {
               id: "14",
               options: [
-                { value: 1, label: "0 - 17 anos", trigger: "15" },
+                { value: 1, label: "Até 17 anos", trigger: "15" },
                 { value: 2, label: "18 - 60 anos", trigger: "15" },
                 { value: 3, label: "Mais de 60 anos", trigger: "15" },
               ],
+              placeholder: "Escolha uma opção",
             },
-            //#endregion
-
             {
               id: "15",
-              message: "Conte-me como você está se sentindo",
+              message: "Qual é o seu sexo?",
               trigger: "16",
             },
             {
               id: "16",
+              options: [
+                { value: 0, label: "Feminino", trigger: "49" },
+                { value: 1, label: "Masculino", trigger: "49" },
+              ],
+              placeholder: "Escolha uma opção",
+            },
+            //#endregion
+
+            //#region Login
+            {
+              id: "30",
+              message: "Email:",
+              trigger: "31",
+            },
+            {
+              id: "31",
+              user: true,
+              trigger: "32",
+            },
+
+            {
+              id: "32",
+              message: "Senha:",
+              trigger: "33",
+            },
+            {
+              id: "33",
+              user: true,
+              trigger: "50",
+            },
+            //#endregion
+
+            {
+              id: "49",
+              message: "Ok, Vamos lá!",
+              trigger: "50",
+            },
+            {
+              id: "50",
+              message: "Conte-me como você está se sentindo",
+              trigger: "51",
+            },
+            {
+              id: "51",
               component: (
                 <AnimatedMulti
                   onChange={(valores) => handleSintomas(valores)}
                 />
               ),
               placeholder: "Marque as opções",
-              trigger: "17",
+              trigger: "52",
             },
             {
-              id: "17",
+              id: "52",
               message: "Finalizou?",
-              trigger: "18",
               delay: 5000,
+              trigger: "53",
             },
             {
-              id: "18",
-              options: [{ value: 1, label: "Sim!", trigger: "19" }],
+              id: "53",
+              options: [{ value: 1, label: "Sim!", trigger: "54" }],
+              placeholder: "Finalizou",
             },
             {
-              id: "19",
+              id: "54",
               message: "Obrigado por reportar!",
-              trigger: "20",
+              trigger: "55",
             },
             {
-              id: "20",
+              id: "55",
               message: "Fim",
               end: true,
             },
