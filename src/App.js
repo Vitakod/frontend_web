@@ -16,8 +16,8 @@ function App() {
 
   const {
     coords,
-    isGeolocationAvailable,
-    isGeolocationEnabled,
+    // isGeolocationAvailable,
+    // isGeolocationEnabled,
   } = useGeolocated({
     positionOptions: {
       enableHighAccuracy: true,
@@ -27,7 +27,7 @@ function App() {
 
   const [localizacaoAtiva, setLocalizacaoAtiva] = useState(false);
   const [usuarioLocalizacao, setUsuarioLocalizacao] = useState();
-  const [sintomas, setSintomas] = useState([]);
+  // const [sintomas, setSintomas] = useState([]);
 
   const verificarLocalizacao = () => {
     if (coords) {
@@ -49,6 +49,7 @@ function App() {
       return v.value;
     });
     console.log(sintomasValue);
+    console.log(usuarioLocalizacao);
   };
 
   return (
