@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Beneficios from '../Assets/images/Beneficios.png'
 import "../App.css";
 
@@ -6,6 +6,14 @@ export default function VitaClub() {
     const [pontos, setPontos] = useState(0)
     const [mostrarBeneficios, setMostrarBeneficios] = useState(false)
 
+    const handleObterPontos=()=>{
+        setPontos(0);
+    }
+
+    useEffect(()=>{
+
+    },[handleObterPontos]);
+    
     return <div className="VitaClub">
         <div className="Pontos">
             <div>
