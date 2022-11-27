@@ -7,15 +7,76 @@ import { useState } from "react";
 import axios from "axios";
 
 function App() {
+  const [dadosColetados, setDadosColetados] = useState({})
+  const [localizacaoAtiva, setLocalizacaoAtiva] = useState(false);
+  const [usuarioLocalizacao, setUsuarioLocalizacao] = useState();
+  const [sintomas, setSintomas] = useState([])
+
   const handleEnd = ({ steps, values }) => {
     // console.log(steps);
-    // console.log(values);
-    const valuesString = values.map((v) => {
-      return v;
-    });
-    console.log(usuarioLocalizacao);
 
-    alert(`Valores: ${valuesString}`);
+    // console.log(values)
+
+    // const valuesString = values.map((v) => {
+    //   return v;
+    // });
+    // console.log(usuarioLocalizacao);
+
+    const filtro = (valores, palavraChave) => {
+      if (valores.find(valor => typeof valor == 'string' && valor.includes(palavraChave)))
+        return parseInt(valores.find(valor => typeof valor == 'string' && valor.includes(palavraChave)).split('=')[1])
+      else return null
+    }
+
+    let email
+    let senha
+    let cpf
+    let faixaEtaria
+    let sexo
+
+    if (filtro(values, 'Indentificacao') == 1) {
+      if (filtro(values, 'MetodoIndentificacao') == 1) {
+        email = values[2]
+        senha = values[3]
+        cpf = values[4]
+        faixaEtaria = filtro(values, 'faixaEtaria')
+        sexo = filtro(values, 'sexo')
+      }
+      else {
+        email = values[2]
+        senha = values[3]
+      }
+    }
+    else {
+      faixaEtaria = filtro(values, 'faixaEtaria')
+      sexo = filtro(values, 'sexo')
+    }
+
+    const dados = {
+      sexo,
+      faixa_etaria: faixaEtaria,
+      lat: usuarioLocalizacao.latitude,
+      lng: usuarioLocalizacao.longitude,
+      sintomas,
+      email,
+      senha,
+      cpf
+    }
+
+    setDadosColetados(dados)
+
+    // console.log('dados coletados', {
+    //   sexo,
+    //   faixa_etaria: faixaEtaria,
+    //   lat: usuarioLocalizacao.latitude,
+    //   lng: usuarioLocalizacao.longitude,
+    //   sintomas,
+    //   email,
+    //   senha,
+    //   cpf
+    // })
+
+    // alert(`Valores: ${valuesString}`);
     handleSave();
   };
 
@@ -29,9 +90,6 @@ function App() {
     },
     userDecisionTimeout: 5000,
   });
-
-  const [localizacaoAtiva, setLocalizacaoAtiva] = useState(false);
-  const [usuarioLocalizacao, setUsuarioLocalizacao] = useState();
 
   const [tela, setTela] = useState("chat");
 
@@ -54,6 +112,7 @@ function App() {
       return v.value;
     });
     console.log(sintomasValue);
+    setSintomas(sintomasValue);
   };
 
   const handleSave = async () => {
@@ -81,7 +140,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <button onClick={handleSave}>teste</button>
+        {/* <button onClick={handleSave}>teste</button> */}
         <ChatBot
           style={{ display: localizacaoAtiva ? "none" : "" }}
           headerTitle="Verificando Localização"
@@ -135,8 +194,8 @@ function App() {
             {
               id: "2",
               options: [
-                { value: 1, label: "Não!", trigger: "6" },
-                { value: 2, label: "Sim...", trigger: "3" },
+                { value: 'Indentificacao=0', label: "Não!", trigger: "6" },
+                { value: 'Indentificacao=1', label: "Sim...", trigger: "3" },
               ],
               placeholder: "Escolha uma opção",
             },
@@ -148,8 +207,8 @@ function App() {
             {
               id: "4",
               options: [
-                { value: 1, label: "Login", trigger: "30" },
-                { value: 2, label: "Novo cadastro", trigger: "7" },
+                { value: 'MetodoIndetificacao=0', label: "Login", trigger: "30" },
+                { value: 'MetodoIndentificacao=1', label: "Novo cadastro", trigger: "7" },
               ],
               placeholder: "Escolha uma opção",
             },
@@ -198,9 +257,9 @@ function App() {
             {
               id: "14",
               options: [
-                { value: 1, label: "Até 17 anos", trigger: "15" },
-                { value: 2, label: "18 - 60 anos", trigger: "15" },
-                { value: 3, label: "Mais de 60 anos", trigger: "15" },
+                { value: 'faixaEtaria=1', label: "Até 17 anos", trigger: "15" },
+                { value: 'faixaEtaria=2', label: "18 - 60 anos", trigger: "15" },
+                { value: 'faixaEtaria=3', label: "Mais de 60 anos", trigger: "15" },
               ],
               placeholder: "Escolha uma opção",
             },
@@ -212,8 +271,8 @@ function App() {
             {
               id: "16",
               options: [
-                { value: 0, label: "Feminino", trigger: "49" },
-                { value: 1, label: "Masculino", trigger: "49" },
+                { value: 'sexo=0', label: "Feminino", trigger: "49" },
+                { value: 'sexo=1', label: "Masculino", trigger: "49" },
               ],
               placeholder: "Escolha uma opção",
             },
