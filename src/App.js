@@ -54,7 +54,7 @@ function App() {
             {
               id: "1",
               message:
-                "Antes de começarmos precisamos acessar sua localização :)",
+                "Antes de começarmos preciso que você nos conceda sua localização para o navegador :)",
               trigger: "2",
             },
             {
@@ -75,22 +75,6 @@ function App() {
           contentStyle={{ backgroundColor: "#eee" }}
           placeholder={"Escolha a opção..."}
           steps={[
-            {
-              id: "1",
-              message: "Olá",
-              trigger: "2",
-            },
-            {
-              id: "2",
-              message:
-                "Antes de começarmos preciso que você nos conceda sua localização para o navegador :)",
-              trigger: "3",
-            },
-            {
-              id: "3",
-              options: [{ value: 1, label: "Entendi.", trigger: "4" }],
-            },
-
             //#region IDENTIFICAÇÃO
             {
               id: "4",
@@ -106,8 +90,8 @@ function App() {
             },
             {
               id: "6",
-              message: "Fim!",
-              end: true,
+              message: "Ok, Vamos lá!",
+              trigger: "15",
             },
             {
               id: "7",
@@ -156,7 +140,30 @@ function App() {
 
             {
               id: "15",
-              message: "Acabou!",
+              message: "Conte-me como você está se sentindo",
+              trigger: "16",
+            },
+            {
+              id: "16",
+              options: [
+                { value: 1, label: "Tosse", trigger: "17" },
+                { value: 2, label: "Febre", trigger: "17" },
+                { value: 3, label: "Cansaço", trigger: "17" },
+                { value: 4, label: "Perda de paladar/olfato", trigger: "17" },
+                { value: 5, label: "Falta de ar", trigger: "17" },
+                { value: 6, label: "Diarréia", trigger: "17" },
+                { value: 7, label: "Dor de cabeça", trigger: "17" },
+              ],
+              placeholder: "Marque as opções",
+            },
+            {
+              id: "17",
+              message: "Obrigado por reportar!",
+              trigger: "18",
+            },
+            {
+              id: "18",
+              message: "Fim",
               end: true,
             },
           ]}
