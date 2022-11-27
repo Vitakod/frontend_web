@@ -21,7 +21,7 @@ export default function VitaClub() {
                 <h5 style={{ marginTop: '0px' }}>Pontos</h5>
             </div>
 
-            {mostrarBeneficios ? <img src={Beneficios} className="Pontos_Beneficios" /> : null}
+            {mostrarBeneficios ? <img src={Beneficios} alt="" className="Pontos_Beneficios" /> : null}
 
             <div className="Pontos_Principal">
                 <h6>Programa de Pontos VitaClub</h6>
