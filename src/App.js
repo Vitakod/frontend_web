@@ -14,7 +14,7 @@ function App() {
 
   const handleEnd = ({ steps, values }) => {
     // console.log(steps);
-
+    console.log(dadosColetados)
     // console.log(values)
 
     // const valuesString = values.map((v) => {
@@ -34,8 +34,8 @@ function App() {
     let faixaEtaria
     let sexo
 
-    if (filtro(values, 'Indentificacao') == 1) {
-      if (filtro(values, 'MetodoIndentificacao') == 1) {
+    if (filtro(values, 'Indentificacao') === 1) {
+      if (filtro(values, 'MetodoIndentificacao') === 1) {
         email = values[2]
         senha = values[3]
         cpf = values[4]
