@@ -7,7 +7,7 @@ function App() {
   const { coords, isGeolocationAvailable, isGeolocationEnabled } = useGeolocated(
     {
       positionOptions: {
-        enableHighAccuracy: false,
+        enableHighAccuracy: true,
       },
       userDecisionTimeout: 5000,
     }
@@ -54,7 +54,7 @@ function App() {
 
         <ChatBot
           style={{ display: !localizacaoAtiva ? 'none' : '' }}
-          headerTitle="VITA=KOD"
+          headerTitle="Vitabot"
           steps={[
             {
               id: "1",
@@ -64,22 +64,39 @@ function App() {
             {
               id: "2",
               message:
-                "Obrigado por permitir a localização :)",
+                "Localização encontrada, vamos prosseguir :)",
               trigger: "3"
             },
             {
               id: "3",
-              options: [{ label: 'Ok', trigger: '4' }],
+              options: [{ label: 'Vamos lá!', trigger: '4' }],
               trigger: "4",
             },
             {
               id: "4",
-              message: "Hi {previousValue}, nice to meet you!",
+              message: "Deseja se identificar?",
+              trigger: "5",
+            },
+            {
+              id: "5",
+              options: [
+                { value: 1, label: "Não!", trigger: "6" },
+                { value: 2, label: "Sim...", trigger: "7" },
+              ],
+            },
+            {
+              id: "6",
+              message: "Fim!",
               end: true,
             },
-          ]
-          } />
-
+            {
+              id: "7",
+              message: "Bora que vamo!",
+              end: true,
+            },
+          ]}
+        />
+        <div className="Versao-div">v 0.1</div>
       </header>
     </div>
   )
